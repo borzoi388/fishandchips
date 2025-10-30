@@ -156,9 +156,9 @@ public class ImageUtilities
      * @return
      */
 
-    public static BufferedImage drawImage(Graphics pen, BufferedImage image, int x, int y)
+    public static BufferedImage drawImage(Graphics pen, BufferedImage image, int x, int y, int width, int height)
     {
-        pen.drawImage(image, x, y, null);
+        pen.drawImage(image, x, y, width, height, null);
         return image;
     }
 
@@ -170,9 +170,9 @@ public class ImageUtilities
      * @param y the y coordinate of the center of the image
      */
 
-    public static void drawCenteredImage(Graphics pen, BufferedImage image, int x, int y)
+    public static void drawCenteredImage(Graphics pen, BufferedImage image, int x, int y, int w, int h)
     {
-        pen.drawImage(image, x-image.getWidth()/2, y-image.getHeight()/2, null);
+        pen.drawImage(image, x-image.getWidth()/2, y-image.getHeight()/2, w, h, null);
     }
 
     /**********************************************************************

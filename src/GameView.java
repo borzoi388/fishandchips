@@ -2,6 +2,8 @@ import CatlinGraphics2D.AnimationCanvas2D;
 import CatlinGraphics2D.ImageUtilities;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 
 public class GameView extends AnimationCanvas2D {
@@ -9,12 +11,18 @@ public class GameView extends AnimationCanvas2D {
     double char_y = 400;
     double char_xv = 0;
     double char_yv = 0;
+    int panelWidth;
+    int panelHeight;
+    PotatoField field;
 
     Color black = new Color(0, 0, 0);
 
 
     GameView(int width, int height) {
         super(width, height, 100);
+        panelWidth = width;
+        panelHeight = height;
+        addComponentListener(new GamePanelComponentListener());
     }
 
     @Override
@@ -30,22 +38,29 @@ public class GameView extends AnimationCanvas2D {
     @Override
     public void draw(Graphics2D pen) {
 
+        field = new PotatoField(8, 8);
+        for (int r = 0; r < field.getNumRows(); r++) {
+            for (int c = 0; c < field.getNumCols(); c++) {
+                ImageUtilities.drawImage(pen, Images.caol, field.getTile(r, c).getRow()*(panelHeight/8), field.getTile(r, c).getCol()*(panelHeight/8), panelHeight/8, panelHeight/8);
+            }
+        }
+
 
         if (!(char_xv == 0)) {
             //Draws char moving left or right
-            ImageUtilities.drawCenteredImage(pen, ImageUtilities.flipImage(Images.testLR, isKeyPressed(KeyEvent.VK_LEFT), false), (int) char_x, (int) char_y);
+            ImageUtilities.drawCenteredImage(pen, ImageUtilities.flipImage(Images.testLR, isKeyPressed(KeyEvent.VK_LEFT), false), (int) char_x, (int) char_y, panelHeight/6, panelHeight/6);
 
         } else if (isKeyPressed(KeyEvent.VK_UP)) {
             //Draws char moving up
-            ImageUtilities.drawCenteredImage(pen, Images.testUp, (int) char_x, (int) char_y);
+            ImageUtilities.drawCenteredImage(pen, Images.testUp, (int) char_x, (int) char_y, panelHeight/6, panelHeight/6);
 
         } else if (isKeyPressed(KeyEvent.VK_DOWN)) {
             //Draws char moving down
-            ImageUtilities.drawCenteredImage(pen, Images.testDown, (int) char_x, (int) char_y);
+            ImageUtilities.drawCenteredImage(pen, Images.testDown, (int) char_x, (int) char_y, panelHeight/6, panelHeight/6);
 
         } else {
             //Draws default char
-            ImageUtilities.drawCenteredImage(pen, Images.testStill, (int) char_x, (int) char_y);
+            ImageUtilities.drawCenteredImage(pen, Images.testStill, (int) char_x, (int) char_y, panelHeight/6, panelHeight/6);
         }
 
         pen.setColor(black);
@@ -87,4 +102,20 @@ public class GameView extends AnimationCanvas2D {
         char_y += char_yv;
         char_x += char_xv;
     }
+
+    void calculateTileSize() {
+        Dimension d = getSize();
+        panelWidth = d.width;
+        panelHeight = d.height;
+    }
+
+    class GamePanelComponentListener extends ComponentAdapter
+    {
+        public void componentResized(ComponentEvent event)
+        {
+            // when the game panel is resized, adjust the size of the cells
+            calculateTileSize();
+            repaint();
+        }
+    } // class GamePanelComponentListener
 }
