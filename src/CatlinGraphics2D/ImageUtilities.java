@@ -153,11 +153,13 @@ public class ImageUtilities
      * @param image the image to draw
      * @param x the x coordinate of the top-left corner of the image
      * @param y the y coordinate of the top-left corner of the image
+     * @return
      */
 
-    public static void drawImage(Graphics pen, BufferedImage image, int x, int y)
+    public static BufferedImage drawImage(Graphics pen, BufferedImage image, int x, int y)
     {
         pen.drawImage(image, x, y, null);
+        return image;
     }
 
     /**********************************************************************

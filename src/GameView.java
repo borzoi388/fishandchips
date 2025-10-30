@@ -1,14 +1,15 @@
 import CatlinGraphics2D.AnimationCanvas2D;
 import CatlinGraphics2D.ImageUtilities;
+import CatlinGraphics2D.Images;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class GameView extends AnimationCanvas2D {
-    double caol_x = 600;
-    double caol_y = 400;
-    double caol_xv = 0;
-    double caol_yv = 0;
+    double char_x = 600;
+    double char_y = 400;
+    double char_xv = 0;
+    double char_yv = 0;
 
 
     GameView(int width, int height) {
@@ -27,42 +28,58 @@ public class GameView extends AnimationCanvas2D {
 
     @Override
     public void draw(Graphics2D pen) {
-        ImageUtilities.drawImage(pen, ImageUtilities.loadImage("resources/images", "caol_test.png"), (int)caol_x, (int)caol_y);
+
+        if (!(char_xv == 0)) {
+            //Draws char moving left or right
+            ImageUtilities.drawCenteredImage(pen, ImageUtilities.flipImage(Images.testLR, isKeyPressed(KeyEvent.VK_LEFT), false), (int) char_x, (int) char_y);
+
+        } else if (isKeyPressed(KeyEvent.VK_UP)) {
+            //Draws char moving up
+            ImageUtilities.drawCenteredImage(pen, Images.testUp, (int) char_x, (int) char_y);
+
+        } else if (isKeyPressed(KeyEvent.VK_DOWN)) {
+            //Draws char moving down
+            ImageUtilities.drawCenteredImage(pen, Images.testDown, (int) char_x, (int) char_y);
+
+        } else {
+            //Draws default char
+            ImageUtilities.drawCenteredImage(pen, Images.testStill, (int) char_x, (int) char_y);
+        }
     }
 
-    // Event key listens for caol
-    // Allows user to control caol with arrow keys
+    // Event key listens for char
+    // Allows user to control char with arrow keys
     private void caolArrowListen() {
         // Checks if left and right arrow keys are pressed
-        // if so, increases caol's velocity in that direction
-        // else, decreases caol's velocity
+        // if so, increases char's velocity in that direction
+        // else, decreases char's velocity
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
-            caol_xv = -2;
+            char_xv = -2;
         } else if (isKeyPressed(KeyEvent.VK_RIGHT)){
-            caol_xv = 2;
+            char_xv = 2;
         } else {
-            caol_xv = 0;
+            char_xv = 0;
         }
 
         // Checks if up and down arrow keys are pressed
-        // if so, increases caol's velocity in that direction
-        // else, decreases caol's velocity
+        // if so, increases char's velocity in that direction
+        // else, decreases char's velocity
         if (isKeyPressed(KeyEvent.VK_UP)) {
-            caol_yv = -2;
+            char_yv = -2;
         } else if (isKeyPressed(KeyEvent.VK_DOWN)){
-            caol_yv = 2;
+            char_yv = 2;
         } else {
-            caol_yv = 0;
+            char_yv = 0;
         }
 
         // Checks if more than 1 keys are pressed, if so, decreases speed
-        if (!(caol_yv == 0) && !(caol_xv == 0)) {
-            caol_xv /= Math.sqrt(2);
-            caol_yv /= Math.sqrt(2);
+        if (!(char_yv == 0) && !(char_xv == 0)) {
+            char_xv /= Math.sqrt(2);
+            char_yv /= Math.sqrt(2);
         }
 
         // Applies velocity to x and y values
-        caol_y += caol_yv;
-        caol_x += caol_xv;
+        char_y += char_yv;
+        char_x += char_xv;
     }
 }
