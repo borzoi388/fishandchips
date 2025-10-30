@@ -1,6 +1,5 @@
 import CatlinGraphics2D.AnimationCanvas2D;
 import CatlinGraphics2D.ImageUtilities;
-import CatlinGraphics2D.Images;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -10,6 +9,8 @@ public class GameView extends AnimationCanvas2D {
     double char_y = 400;
     double char_xv = 0;
     double char_yv = 0;
+
+    Color black = new Color(0, 0, 0);
 
 
     GameView(int width, int height) {
@@ -23,11 +24,12 @@ public class GameView extends AnimationCanvas2D {
 
     @Override
     public void update(double elapsedMilliseconds) {
-        caolArrowListen();
+        charArrowListen();
     }
 
     @Override
     public void draw(Graphics2D pen) {
+
 
         if (!(char_xv == 0)) {
             //Draws char moving left or right
@@ -45,11 +47,14 @@ public class GameView extends AnimationCanvas2D {
             //Draws default char
             ImageUtilities.drawCenteredImage(pen, Images.testStill, (int) char_x, (int) char_y);
         }
+
+        pen.setColor(black);
+        pen.drawString("HELLO WORKD", 600, 400);
     }
 
     // Event key listens for char
     // Allows user to control char with arrow keys
-    private void caolArrowListen() {
+    private void charArrowListen() {
         // Checks if left and right arrow keys are pressed
         // if so, increases char's velocity in that direction
         // else, decreases char's velocity
